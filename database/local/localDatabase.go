@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"github.com/keita0q/go-dsp/database"
 	"github.com/keita0q/go-dsp/model"
+	"path"
 )
 
 type LocalDB struct {
@@ -19,15 +20,38 @@ func NewDatabase(aSavePath string) *LocalDB {
 
 func (aDatabase *LocalDB) LoadAllAdvertiser() ([]model.Advertiser, error) {
 	tAdvertisers := []model.Advertiser{}
-	tError := aDatabase.eachFile(aDatabase.savePath, func(aFileInfo os.FileInfo, aBytes []byte) error {
-		tAdvertiser := model.Advertiser{}
-		if tError := json.Unmarshal(aBytes, &tAdvertiser); tError != nil {
-			return tError
-		}
-		tAdvertisers = append(tAdvertisers, tAdvertiser)
-		return nil
-	})
 
+	//tError := aDatabase.eachFile(aDatabase.savePath, func(aFileInfo os.FileInfo, aBytes []byte) error {
+	//	tAdvertiser := model.Advertiser{}
+	//	if tError := json.Unmarshal(aBytes, &tAdvertiser); tError != nil {
+	//		return tError
+	//	}
+	//	tAdvertisers = append(tAdvertisers, tAdvertiser)
+	//	return nil
+	//})
+	tBytes, tError := ioutil.ReadFile(path.Join(aDatabase.savePath, "budgets.json"))
+	if tError != nil {
+		return nil, database.NewNotFoundError(tError.Error())
+	}
+	tBudgets := &database.Budgets{}
+	if tError := json.Unmarshal(tBytes, tBudgets); tError != nil {
+		return nil, tError
+	}
+
+	tBytes, tError = ioutil.ReadFile(path.Join(aDatabase.savePath, "ngdomains.json"))
+	if tError != nil {
+		return nil, database.NewNotFoundError(tError.Error())
+	}
+	tNgDomains := &database.NgDomains{}
+	if tError := json.Unmarshal(tBytes, tNgDomains); tError != nil {
+		return nil, tError
+	}
+
+	for tAdv, tBudget := range tBudgets.AdvBudget {
+		tNgs := tNgDomains.AdvNgs[tAdv]
+		tAdvertiser := model.Advertiser{ID:tAdv, Budget:tBudget.Budget, Cpc: tBudget.Cpc, NgDomains:tNgs}
+		tAdvertisers = append(tAdvertisers, tAdvertiser)
+	}
 	return tAdvertisers, tError
 }
 

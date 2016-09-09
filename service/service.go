@@ -67,9 +67,6 @@ func (aService *Service) WinNotice(aWriter http.ResponseWriter, aRequest *http.R
 			return http.StatusBadRequest, nil, tError
 		}
 
-		// TODO Process Win
-
-
 		return http.StatusNoContent, nil, nil
 	})(aWriter, aRequest)
 }

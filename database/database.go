@@ -19,3 +19,16 @@ func NewNotFoundError(aMessage string) *NotFoundError {
 func (aNotFoundError *NotFoundError) Error() string {
 	return aNotFoundError.message
 }
+
+type  Budgets struct {
+	AdvBudget map[string]*BudgetInfo
+}
+
+type BudgetInfo struct {
+	Budget int `json:"budget"`
+	Cpc    int `json:"cpc"`
+}
+
+type NgDomains struct {
+	AdvNgs map[string][]string
+}

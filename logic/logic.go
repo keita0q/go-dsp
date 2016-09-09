@@ -8,4 +8,7 @@ type Logic interface {
 
 type Response struct {
 	ID string `json:"id"`
+	BidPrice float64 `json:"bidPrice"`
+	AdvertiserID string `json:"advertiserId"`
+	Nurl string `json:"nurl"`
 }

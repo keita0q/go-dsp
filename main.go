@@ -100,3 +100,4 @@ type config struct {
 	SavePath     string `json:"save_path"`
 	ResourcePath string `json:"resource_path"`
 }
+
