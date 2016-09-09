@@ -51,11 +51,11 @@ func (aService *Service) BidRequest(aWriter http.ResponseWriter, aRequest *http.
 		if tError := json.Unmarshal(aRequestBody, tBid); tError != nil {
 			return http.StatusBadRequest, nil, tError
 		}
-		tResponse, tError := aService.manager.ExecuteCore(tBid)
+		_, tError := aService.manager.ExecuteCore(tBid)
 		if tError != nil {
 			return http.StatusInternalServerError, nil, tError
 		}
-		return http.StatusOK, tResponse, nil
+		return http.StatusNoContent, nil, nil
 
 	})(aWriter, aRequest)
 }
@@ -66,7 +66,9 @@ func (aService *Service) WinNotice(aWriter http.ResponseWriter, aRequest *http.R
 		if tError := json.Unmarshal(aRequestBody, tWin); tError != nil {
 			return http.StatusBadRequest, nil, tError
 		}
-
+		if tError := aService.manager.WinProcess(tWin); tError != nil {
+			return http.StatusInternalServerError, nil, tError
+		}
 		return http.StatusNoContent, nil, nil
 	})(aWriter, aRequest)
 }
