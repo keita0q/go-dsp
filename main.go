@@ -83,7 +83,7 @@ func main() {
 		tRouter.Post(path.Join(tContextPath, "/rest/v1/win"), tService.WinNotice)
 
 		//tRouter.Post(path.Join(tContextPath, "/rest/v1/advertiser"), tService.SaveAdvertiser)
-		//tRouter.Get(path.Join(tContextPath, "/.*"), tService.GetFile)
+		tRouter.Get(path.Join(tContextPath, "/.*"), tService.GetFile)
 
 		http.Handle(tContextPath, tRouter)
 
