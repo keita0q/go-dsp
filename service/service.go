@@ -66,9 +66,9 @@ func (aService *Service) WinNotice(aWriter http.ResponseWriter, aRequest *http.R
 		if tError := json.Unmarshal(aRequestBody, tWin); tError != nil {
 			return http.StatusBadRequest, nil, tError
 		}
-		if tError := aService.manager.WinProcess(tWin); tError != nil {
-			return http.StatusInternalServerError, nil, tError
-		}
+		//if tError := aService.manager.WinProcess(tWin); tError != nil {
+		//	return http.StatusInternalServerError, nil, tError
+		//}
 		return http.StatusNoContent, nil, nil
 	})(aWriter, aRequest)
 }
